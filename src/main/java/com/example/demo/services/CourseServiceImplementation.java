@@ -1,45 +1,31 @@
 package com.example.demo.services;
-
 import com.example.demo.Entities.Course;
+import com.example.demo.repositories.CourseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// Use for loose coupling...
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseServiceImplementation extends CourseService {
-    List<Course> list;
 
-    public CourseServiceImplementation() {
-//        Can also be fetched by database...
-        list=new ArrayList<>();
-        list.add(new Course(333, "Microservices and Spring boot", "Learning Spring Boot framework and microservices architecture"));
-        list.add(new Course(222, "Natural Language Processing", "Craeting Real-worl projects using NLP"));
-    }
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Override
     public List<Course> getCourses() {
-        return list;
+        return courseRepository.findAll();
     }
 
     @Override
     public Course getCourse(long courseId) {
-
-        Course c=null;
-        for(Course course:list){
-            if (course.getId() == courseId){
-                c = course;
-                break;
-            }
-        }
-        return c;
+        Optional<Course> course = courseRepository.findById(courseId);
+        return course.orElse(null);
     }
-//
+
     @Override
     public Course addCourse(Course course) {
-        list.add(course);
-        return course;
+        return courseRepository.save(course);
     }
 }

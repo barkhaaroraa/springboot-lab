@@ -1,21 +1,31 @@
 package com.example.demo.Entities;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Course {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String title;
     private String description;
 
-    public Course(long id,String title,String description){
-        this.id=id;
-        this.title=title;
-        this.description=description;
+    @Version // This field is used for optimistic locking
+    private Integer version;
 
-
+    public Course(long id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
-    public Course(){
+
+    public Course() {
         super();
     }
-    //    Generate getters and setters
+
+    // Getters and Setters
     public long getId() {
         return id;
     }
@@ -40,14 +50,21 @@ public class Course {
         this.description = description;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
 
-//    Generate toString method
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", version=" + version +
                 '}';
     }
 }
